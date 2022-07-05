@@ -28,29 +28,29 @@ app.get('/',(req,res)=>{
 });
 
 //localhost:3000/usdcad?start_date
-app.get('/usdcad',(req,res)=>{
-    res.send('USD to CAD conversion');
-    const start_date = req.query.start_date;
-    const end_date = req.query.end_date;
+// app.get('/usdcad',(req,res)=>{
+//     res.send('USD to CAD conversion');
+//     const start_date = req.query.start_date;
+//     const end_date = req.query.end_date;
 
-    usdcadRates(start_date,end_date, (result) => {
-        console.log(result,"Result");
-    })
+//     usdcadRates(start_date,end_date, (result) => {
+//         console.log(result,"Result");
+//     })
     
-});
+// });
 
 app.get('/corra',(req,res)=>{
-    res.send('Corra rates');
+    res.render('pages/corra');
     const start_date = req.query.start_date;
     const end_date = req.query.end_date;
 
-    corraRates(start_date,end_date, (result) => {
-        console.log(result);
-    })
+    // corraRates(start_date,end_date, (result) => {
+    //     console.log(result);
+    // })
 });
 
 app.get('/correlation',(req,res)=>{
-    res.send('Correlation');
+    res.render('pages/corrrelation');
 });
 
 app.get('*',(req,res)=>{
@@ -61,9 +61,20 @@ app.get('*',(req,res)=>{
 app.post("/calculate", function(req, res){
     var from = req.body.from;
     var to = req.body.to;
-    //var result = usdcadRates(from, to);
+    
     usdcadRates(from,to, (result) => {
-        res.render('pages/calculate', {result:result})
+        res.render('pages/calculate', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
+        
+    })
+    
+ });
+
+ app.post("/corraCal", function(req, res){
+    var from = req.body.from;
+    var to = req.body.to;
+    
+    corraRates(from,to, (result) => {
+        res.render('pages/corraCal', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
         
     })
     

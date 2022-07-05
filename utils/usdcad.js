@@ -14,10 +14,7 @@ const calHigh = (obs) => {
 
     console.log("High ", high, " on ", date);
 
-    return {
-        high:high,
-        date:date
-    };
+    return parseFloat(high);
 
 }
 
@@ -34,10 +31,7 @@ const calLow = (obs) => {
 
     console.log("Low ", low, " on ", date);
 
-    return {
-        low:low,
-        date:date
-    };
+    return parseFloat(low);
 
 }
 
@@ -71,13 +65,19 @@ const usdcadRates = (start_date,end_date, callback) => {
         // console.log(body.observations[0].FXCADUSD.v)
         //console.log(body.observations);
         var avg = calAvg(body.observations);
+        var high = calHigh(body.observations);
+        var low = calLow(body.observations);
 
         if(error) {
             callback("Cannot fetch the data")
         }
         else{
             callback(
-                avg
+                {
+                    avg:avg.toFixed(2),
+                    high:high.toFixed(2),
+                    low:low.toFixed(2)
+                }
             )
         }
     })
