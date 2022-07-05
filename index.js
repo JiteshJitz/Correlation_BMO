@@ -1,3 +1,4 @@
+const { request } = require('express');
 const express = require('express');
 const hbs = require('hbs');
 const path = require('path');
@@ -5,6 +6,7 @@ const { usdcad } = require('./config');
 const app = express();
 
 const usdcadRates = require('./utils/usdcad');
+const corraRates = require('./utils/corra');
 
 const port = process.env.PORT || 3000
 
@@ -27,7 +29,7 @@ app.get('/',(req,res)=>{
 
 //localhost:3000/usdcad?start_date
 app.get('/usdcad',(req,res)=>{
-    // res.send('USD to CAD conversion');
+    res.send('USD to CAD conversion');
     const start_date = req.query.start_date;
     const end_date = req.query.end_date;
 
@@ -38,7 +40,13 @@ app.get('/usdcad',(req,res)=>{
 });
 
 app.get('/corra',(req,res)=>{
-    res.send('CORRA rate');
+    res.send('Corra rates');
+    const start_date = req.query.start_date;
+    const end_date = req.query.end_date;
+
+    corraRates(start_date,end_date, (result) => {
+        console.log(result);
+    })
 });
 
 app.get('/correlation',(req,res)=>{
