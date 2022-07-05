@@ -51,7 +51,7 @@ const calAvg = (obs) => {
 
     avg = sum/obs.length;
 
-    console.log("Average is ", avg );
+    //console.log("Average is ", avg );
 
     return avg;
 
@@ -70,14 +70,14 @@ const usdcadRates = (start_date,end_date, callback) => {
     request({url, json:true}, (error, {body})=> {
         // console.log(body.observations[0].FXCADUSD.v)
         //console.log(body.observations);
-        calAvg(body.observations);
+        var avg = calAvg(body.observations);
 
         if(error) {
             callback("Cannot fetch the data")
         }
         else{
             callback(
-                true
+                avg
             )
         }
     })

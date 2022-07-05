@@ -2,6 +2,8 @@ const { request } = require('express');
 const express = require('express');
 const hbs = require('hbs');
 const path = require('path');
+const parser = require("body-parser");
+const http = require("http");
 const { usdcad } = require('./config');
 const app = express();
 
@@ -12,19 +14,17 @@ const port = process.env.PORT || 3000
 
 const publicStaticDirPath = path.join(__dirname, './public');
 
-const viewsPath = path.join(__dirname,'./templates/views');
+const viewsPath = path.join(__dirname,'./views');
 
-const partialsPath = path.join(__dirname,'./templates/partials');
-
-
-app.set('view engine','hbs');
+app.set('view engine', 'ejs');
 app.set('views',viewsPath);
-hbs.registerPartials(partialsPath);
+app.use(parser.urlencoded({ extended: false }))
+app.use(parser.json())
 
 app.use(express.static(publicStaticDirPath));
 
 app.get('/',(req,res)=>{
-    res.send('Correlation Assessment for BMO');
+    res.render('pages/index');
 });
 
 //localhost:3000/usdcad?start_date
@@ -34,7 +34,7 @@ app.get('/usdcad',(req,res)=>{
     const end_date = req.query.end_date;
 
     usdcadRates(start_date,end_date, (result) => {
-        console.log(result);
+        console.log(result,"Result");
     })
     
 });
@@ -57,5 +57,16 @@ app.get('*',(req,res)=>{
     res.send('Page not found');
 });
 
+
+app.post("/calculate", function(req, res){
+    var from = req.body.from;
+    var to = req.body.to;
+    //var result = usdcadRates(from, to);
+    usdcadRates(from,to, (result) => {
+        res.render('pages/calculate', {result:result})
+        
+    })
+    
+ });
 
 app.listen(port, () => console.log('Listening to port: ',port));

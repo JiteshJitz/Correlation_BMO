@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <form action="/calculate" method="POST">
+        <label>From</label>
+        <input type="date" name="from" id="from">
+        <label>To</label>
+        <input type="date" name="to" id="to">
+        <input type="submit" value="Calculate"></submit>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
