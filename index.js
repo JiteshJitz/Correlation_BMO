@@ -10,6 +10,7 @@ const usdcadRates = require('./utils/usdcad');
 const corraRates = require('./utils/corra');
 const corNum = require('./utils/correlation');
 
+
 const port = process.env.PORT || 3000
 
 const publicStaticDirPath = path.join(__dirname, './public');
@@ -37,7 +38,7 @@ app.get('/correlation',(req,res)=>{
 });
 
 app.get('*',(req,res)=>{
-    res.send('Page not found');
+    res.render('pages/error',{error:"Page not found"})
 });
 
 
@@ -46,8 +47,13 @@ app.post("/calculate", function(req, res){
     var to = req.body.to;
     
     usdcadRates(from,to, (result) => {
-        
-        res.render('pages/calculate', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
+        if(result.result === 'Error'){
+            console.log(result.message);
+            res.render('pages/error',{error:result.message})
+        }
+        else{
+            res.render('pages/calculate', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
+        }
         
     })
     
@@ -58,7 +64,14 @@ app.post("/corraCal", function(req, res){
     var to = req.body.to;
     
     corraRates(from,to, (result) => {
-        res.render('pages/corraCal', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
+        if(result.result === 'Error'){
+            console.log(result.message);
+            res.render('pages/error',{error:result.message})
+        }
+        else{
+            res.render('pages/corraCal', {average:result.avg,high:result.high,low:result.low,from:from,to:to})
+        }
+        
         
     })
     
@@ -69,7 +82,14 @@ app.post("/corCal", async (req, res) => {
     var to = req.body.to;
     
     await corNum(from,to, (result) => {
-        res.render('pages/corCal', {corr:result,from:from,to:to})
+        if(result.result === 'Error'){
+            console.log(result.message);
+            res.render('pages/error',{error:result.message})
+        }
+        else{
+            res.render('pages/corCal', {corr:result,from:from,to:to})
+        }
+        
         
     })
     

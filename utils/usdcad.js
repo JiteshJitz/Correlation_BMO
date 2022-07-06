@@ -62,21 +62,25 @@ const usdcadRates = (start_date,end_date, callback) => {
     console.log(url);
     //callback(true);
     request({url, json:true}, (error,response, {body})=> {
-        // console.log(body.observations[0].FXCADUSD.v)
-        //console.log(body.observations);
+    
+        if(response.statusCode>=400) {
+            //console.log("Error for usd-cad", response.body.message);
+            callback({
+                result: "Error",
+                message: response.body.message
 
+            })
+        }
+        else if(response.body.observations.length === 0){
+            console.log("Type a valid date")
+            callback({
+                result: "Error",
+                message: "Type a valid date"
 
-
-        if(error) {
-            console.log("Error for usd-cad", error);
+            })
         }
         else{
 
-            // console.log("Response from  ", response.statusCode)
-            //console.log("Response from  ", response.body.message)
-
-
-           // console.log("Response from  ", response.body)
         var avg = calAvg(response.body.observations);
         var high = calHigh(response.body.observations);
         var low = calLow(response.body.observations);

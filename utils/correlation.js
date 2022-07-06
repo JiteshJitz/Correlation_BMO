@@ -57,17 +57,41 @@ const corNum =  async (start_date,end_date, callback) => {
     
     try {
         let obj1 = await axios.get(url1)
-        //console.log(obj1.data.observations);
+        //console.log(obj1.status);
         let obj2 = await axios.get(url2)
         //console.log(obj2.data.observations);
 
-        var correlationNum = calculateCorrelation(obj1.data.observations,obj2.data.observations);
+        if(obj1.data.observations.length === 0){
 
-        callback(correlationNum.toFixed(3))
+            callback({
+                result: "Error",
+                message: "Type a valid date"
+
+            })
+        }
+        else if(obj2.data.observations.length === 0){
+            callback({
+                result: "Error",
+                message: "Type a valid date"
+
+            })
+        }
+        else{
+            var correlationNum = calculateCorrelation(obj1.data.observations,obj2.data.observations);
+
+            callback(correlationNum.toFixed(3))
+        }
+
+
         
     }
     catch(err){
-        console.log(err);
+        //console.log(err.response.status);
+        console.log(err.response.data.message);
+        callback({
+            result: "Error",
+            message: err.response.data.message
+        })
     }
 
 }
