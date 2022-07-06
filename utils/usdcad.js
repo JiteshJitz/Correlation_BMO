@@ -5,7 +5,7 @@ const calHigh = (obs) => {
 
     let high = 0;
     for(let i = 0;i<obs.length;i++){
-        console.log(obs[i].FXUSDCAD.v)
+        //console.log(obs[i].FXUSDCAD.v)
         if(high<obs[i].FXUSDCAD.v){
             high = obs[i].FXUSDCAD.v
             date = obs[i].d
@@ -22,7 +22,7 @@ const calLow = (obs) => {
 
     let low = obs[0].FXUSDCAD.v
     for(let i = 0;i<obs.length;i++){
-        console.log(obs[i].FXUSDCAD.v)
+        //console.log(obs[i].FXUSDCAD.v)
         if(low>obs[i].FXUSDCAD.v){
             low = obs[i].FXUSDCAD.v
             date = obs[i].d
@@ -39,7 +39,7 @@ const calAvg = (obs) => {
 
     sum = 0;
     for(let i = 0;i<obs.length;i++){
-        console.log(obs[i].FXUSDCAD.v)
+       // console.log(obs[i].FXUSDCAD.v)
         sum = sum + parseFloat(obs[i].FXUSDCAD.v);
     }
 
@@ -61,17 +61,27 @@ const usdcadRates = (start_date,end_date, callback) => {
     const url = constants.usdcad.BASE_URL + encodeURIComponent(start_date) + constants.usdcad.END + encodeURIComponent(end_date);
     console.log(url);
     //callback(true);
-    request({url, json:true}, (error, {body})=> {
+    request({url, json:true}, (error,response, {body})=> {
         // console.log(body.observations[0].FXCADUSD.v)
         //console.log(body.observations);
-        var avg = calAvg(body.observations);
-        var high = calHigh(body.observations);
-        var low = calLow(body.observations);
+
+
 
         if(error) {
-            callback("Cannot fetch the data")
+            console.log("Error for usd-cad", error);
         }
         else{
+
+            // console.log("Response from  ", response.statusCode)
+            //console.log("Response from  ", response.body.message)
+
+
+           // console.log("Response from  ", response.body)
+        var avg = calAvg(response.body.observations);
+        var high = calHigh(response.body.observations);
+        var low = calLow(response.body.observations);
+
+
             callback(
                 {
                     avg:avg.toFixed(2),
@@ -84,3 +94,20 @@ const usdcadRates = (start_date,end_date, callback) => {
 }
 
 module.exports = usdcadRates;
+
+
+
+
+
+
+
+
+
+// const meanValue = (array) => {
+//     let sum = 0;
+//     for(let i = 0; i<array.length; i++){
+//         sum = sum + parseFloat(array[i]);
+//     }
+
+//     return sum/array.length
+// }

@@ -53,10 +53,6 @@ const calAvg = (obs) => {
 }
 
 
-
-
-
-
 const corraRates = (start_date,end_date, callback) => {
     
   

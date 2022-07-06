@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('../partials/head'); %>
+</head>
+<body class="container">
+
+<header>
+  <%- include('../partials/header'); %>
+</header>
+
+<main>
+  <div class="jumbotron">
+    <form action="/corCal" method="POST">
+      <label> From time period <u><%- from %></u> </label>
+      <label> to <u><%- to %></u> <b>CORRA rates</b> are as follows: </label>
+        <br>
+        <label> Correlation is  <%- corr %> </label>
+        
+    </form>
+  </div>
+</main>
+
+<footer>
+  <%- include('../partials/footer'); %>
+</footer>
+
+</body>
+</html>
